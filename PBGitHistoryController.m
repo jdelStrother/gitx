@@ -13,12 +13,21 @@
 #import "PBCommitList.h"
 #define QLPreviewPanel NSClassFromString(@"QLPreviewPanel")
 
+static NSString* HistoryFontSize=@"History Font Size";
 
 @implementation PBGitHistoryController
-@synthesize selectedTab, webCommit, rawCommit, gitTree, commitController;
+@synthesize selectedTab, webCommit, rawCommit, gitTree, commitController, fontSize;
+
++(void)initialize {
+	if (self == [PBGitHistoryController class]) {
+		NSDictionary* defaults = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:[NSFont systemFontSize]] forKey:HistoryFontSize];
+		[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+	}
+}
 
 - (void)awakeFromNib
 {
+	self.fontSize = [[NSUserDefaults standardUserDefaults] floatForKey:HistoryFontSize];
 	self.selectedTab = [[NSUserDefaults standardUserDefaults] integerForKey:@"Repository Window Selected Tab Index"];;
 	[commitController addObserver:self forKeyPath:@"selection" options:(NSKeyValueObservingOptionNew,NSKeyValueObservingOptionOld) context:@"commitChange"];
 	[treeController addObserver:self forKeyPath:@"selection" options:0 context:@"treeChange"];
@@ -76,6 +85,11 @@
 	selectedTab = number;
 	[[NSUserDefaults standardUserDefaults] setInteger:selectedTab forKey:@"Repository Window Selected Tab Index"];
 	[self updateKeys];
+}
+
+-(void)setFontSize:(CGFloat)newSize {
+	fontSize = newSize;	
+	[commitList setRowHeight:ceil(fontSize*1.3)];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context

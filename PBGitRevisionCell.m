@@ -62,7 +62,8 @@
 	NSPoint origin = r.origin;
 	NSPoint columnOrigin = { origin.x + columnWidth * c, origin.y};
 
-	NSRect oval = { columnOrigin.x - 5, columnOrigin.y + r.size.height * 0.5 - 5, 10, 10};
+	CGFloat radius = fontSize*0.4;
+	NSRect oval = { columnOrigin.x - radius, columnOrigin.y + r.size.height * 0.5 - radius, radius*2, radius*2};
 
 	
 	NSBezierPath * path = [NSBezierPath bezierPathWithOvalInRect:oval];
@@ -70,7 +71,8 @@
 	[[NSColor blackColor] set];
 	[path fill];
 	
-	NSRect smallOval = { columnOrigin.x - 3, columnOrigin.y + r.size.height * 0.5 - 3, 6, 6};
+	CGFloat smallRadius = radius*0.6;
+	NSRect smallOval = { columnOrigin.x - smallRadius, columnOrigin.y + r.size.height * 0.5 - smallRadius, smallRadius*2, smallRadius*2};
 	[[NSColor whiteColor] set];
 	path = [NSBezierPath bezierPathWithOvalInRect:smallOval];
 	[path fill];	
@@ -115,7 +117,7 @@
 	
 	[style setAlignment:NSCenterTextAlignment];
 	[attributes setObject:style forKey:NSParagraphStyleAttributeName];
-	[attributes setObject:[NSFont fontWithName:@"Helvetica" size:9] forKey:NSFontAttributeName];
+	[attributes setObject:[NSFont fontWithName:@"Helvetica" size:ceil(fontSize*0.75)] forKey:NSFontAttributeName];
 
 	//if (selected)
 	//	[attributes setObject:[NSColor alternateSelectedControlTextColor] forKey:NSForegroundColorAttributeName];
@@ -235,6 +237,10 @@
 	[textCell setObjectValue: [self.objectValue subject]];
 	[textCell setHighlighted: [self isHighlighted]];
 	[textCell drawWithFrame:rect inView: view];
+}
+-(void)setFont:(NSFont*)font {
+	fontSize = font.pointSize;
+	[textCell setFont:font];
 }
 
 - (void) setObjectValue: (PBGitCommit*)object {
