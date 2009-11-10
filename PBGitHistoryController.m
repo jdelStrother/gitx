@@ -120,6 +120,13 @@ static NSString* HistoryFontSize=@"History Font Size";
 	[[NSWorkspace sharedWorkspace] openTempFile:name];
 }
 
+- (IBAction) changeZoom:sender {
+	CGFloat newSize = self.fontSize + ([(NSSegmentedControl*)sender selectedSegment] ? +1 : -1);
+	newSize = MIN(MAX(newSize, 1), 18);
+	[[NSUserDefaults standardUserDefaults] setFloat:newSize forKey:HistoryFontSize];
+	self.fontSize = newSize;
+}
+
 - (IBAction) setDetailedView: sender {
 	self.selectedTab = 0;
 }

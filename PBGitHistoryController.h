@@ -45,6 +45,7 @@
 - (IBAction) refresh: sender;
 - (IBAction) toggleQuickView: sender;
 - (IBAction) openSelectedFile: sender;
+- (IBAction) changeZoom: sender;
 - (void) updateQuicklookForce: (BOOL) force;
 
 // Context menu methods
