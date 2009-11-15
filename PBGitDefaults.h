@@ -19,5 +19,7 @@
 + (BOOL)showWhitespaceDifferences;
 + (BOOL)openCurDirOnLaunch;
 + (BOOL)showOpenPanelOnLaunch;
++ (CGFloat)historyFontSize;
++ (void)setHistoryFontSize:(CGFloat)newSize;
 
 @end

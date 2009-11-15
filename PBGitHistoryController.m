@@ -11,14 +11,16 @@
 #import "PBGitGrapher.h"
 #import "PBGitRevisionCell.h"
 #import "PBCommitList.h"
+#import "PBGitDefaults.h"
 #define QLPreviewPanel NSClassFromString(@"QLPreviewPanel")
 
-
 @implementation PBGitHistoryController
-@synthesize selectedTab, webCommit, rawCommit, gitTree, commitController;
+@synthesize selectedTab, webCommit, rawCommit, gitTree, commitController, fontSize;
 
 - (void)awakeFromNib
 {
+	self.fontSize = [PBGitDefaults historyFontSize];
+
 	self.selectedTab = [[NSUserDefaults standardUserDefaults] integerForKey:@"Repository Window Selected Tab Index"];;
 	[commitController addObserver:self forKeyPath:@"selection" options:(NSKeyValueObservingOptionNew,NSKeyValueObservingOptionOld) context:@"commitChange"];
 	[treeController addObserver:self forKeyPath:@"selection" options:0 context:@"treeChange"];
@@ -76,6 +78,11 @@
 	selectedTab = number;
 	[[NSUserDefaults standardUserDefaults] setInteger:selectedTab forKey:@"Repository Window Selected Tab Index"];
 	[self updateKeys];
+}
+
+-(void)setFontSize:(CGFloat)newSize {
+	fontSize = newSize;
+	[commitList setRowHeight:ceil(fontSize*1.3)];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context

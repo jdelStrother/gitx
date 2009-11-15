@@ -16,6 +16,7 @@
 	PBGitCommit *objectValue;
 	PBGraphCellInfo *cellInfo;
 	NSTextFieldCell *textCell;
+	CGFloat fontSize;
 	IBOutlet PBGitHistoryController *controller;
 	IBOutlet id<PBRefContextDelegate> contextMenuDelegate;
 }

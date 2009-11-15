@@ -17,6 +17,7 @@
 #define kShowWhitespaceDifferences @"PBShowWhitespaceDifferences"
 #define kOpenCurDirOnLaunch @"PBOpenCurDirOnLaunch"
 #define kShowOpenPanelOnLaunch @"PBShowOpenPanelOnLaunch"
+#define kHistoryFontSize @"PBHistoryFontSize"
 
 @implementation PBGitDefaults
 
@@ -39,6 +40,8 @@
 			  forKey:kOpenCurDirOnLaunch];
 	[defaultValues setObject:[NSNumber numberWithBool:YES]
 			  forKey:kShowOpenPanelOnLaunch];
+	[defaultValues setObject:[NSNumber numberWithFloat:[NSFont systemFontSize]]
+			  forKey:kHistoryFontSize];
 	[[NSUserDefaults standardUserDefaults] registerDefaults:defaultValues];
 }
 
@@ -80,6 +83,16 @@
 + (BOOL)showOpenPanelOnLaunch
 {
 	return [[NSUserDefaults standardUserDefaults] boolForKey:kShowOpenPanelOnLaunch];
+}
+
++ (CGFloat)historyFontSize
+{
+	return [[NSUserDefaults standardUserDefaults] floatForKey:kHistoryFontSize];
+}
+
++ (void)setHistoryFontSize:(CGFloat)newSize
+{
+	[[NSUserDefaults standardUserDefaults] setFloat:newSize forKey:kHistoryFontSize];
 }
 
 @end

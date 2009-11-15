@@ -27,12 +27,15 @@
 	PBGitCommit* webCommit;
 	PBGitCommit* rawCommit;
 	PBGitCommit* realCommit;
+
+	CGFloat fontSize;
 }
 
 @property (assign) int selectedTab;
 @property (retain) PBGitCommit *webCommit, *rawCommit;
 @property (retain) PBGitTree* gitTree;
 @property (readonly) NSArrayController *commitController;
+@property (assign) CGFloat fontSize;
 
 - (IBAction) setDetailedView: sender;
 - (IBAction) setRawView: sender;
