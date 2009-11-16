@@ -113,6 +113,13 @@
 	[[NSWorkspace sharedWorkspace] openTempFile:name];
 }
 
+- (IBAction) changeZoom:sender {
+	CGFloat newSize = self.fontSize + ([sender tag] ? -1 : +1);
+	newSize = MIN(MAX(newSize, 1), 18);
+	[PBGitDefaults setHistoryFontSize:newSize];
+	self.fontSize = newSize;
+}
+
 - (IBAction) setDetailedView: sender {
 	self.selectedTab = 0;
 }
