@@ -1795,33 +1795,25 @@ dispatch_queue_t PBGetWorkQueue() {
 	[self handleRevListArguments:arguments inWorkingDirectory:wd];
 }
 
-// see if the current appleEvent has the command line arguments from the gitx cli
+// handle apple events with the command line arguments from the gitx cli
 // this could be from an openApplication or an openDocument apple event
-// when opening a repository this is called before the sidebar controller gets it's awakeFromNib: message
-// if the repository is already open then this is also a good place to catch the event as the window is about to be brought forward
-- (void)showWindows
-{
-	NSAppleEventDescriptor *currentAppleEvent = [[NSAppleEventManager sharedAppleEventManager] currentAppleEvent];
-
-	if (currentAppleEvent) {
-		NSAppleEventDescriptor *eventRecord = [currentAppleEvent paramDescriptorForKeyword:keyAEPropData];
-
-		// on app launch there may be many repositories opening, so double check that this is the right repo
-		NSString *path = [[eventRecord paramDescriptorForKeyword:typeFileURL] stringValue];
-		if (path) {
-			NSURL *wd = [NSURL URLWithString:path];
-			if ([[PBGitRepository gitDirForURL:wd] isEqual:[self fileURL]]) {
-				NSAppleEventDescriptor *argumentsList = [eventRecord paramDescriptorForKeyword:kGitXAEKeyArgumentsList];
-				[self handleGitXScriptingArguments:argumentsList inWorkingDirectory:wd];
-
-				// showWindows may be called more than once during app launch so remove the CLI data after we handle the event
-				[currentAppleEvent removeDescriptorWithKeyword:keyAEPropData];
-			}
+-(void)handleEvent:(NSAppleEventDescriptor*)currentAppleEvent {
+	NSAppleEventDescriptor *eventRecord = [currentAppleEvent paramDescriptorForKeyword:keyAEPropData];
+	
+	// on app launch there may be many repositories opening, so double check that this is the right repo
+	NSString *path = [[eventRecord paramDescriptorForKeyword:typeFileURL] stringValue];
+	if (path) {
+		NSURL *wd = [NSURL URLWithString:path];
+		if ([[PBGitRepository gitDirForURL:wd] isEqual:[self fileURL]]) {
+			NSAppleEventDescriptor *argumentsList = [eventRecord paramDescriptorForKeyword:kGitXAEKeyArgumentsList];
+			[self handleGitXScriptingArguments:argumentsList inWorkingDirectory:wd];
+			
+			// showWindows may be called more than once during app launch so remove the CLI data after we handle the event
+			[currentAppleEvent removeDescriptorWithKeyword:keyAEPropData];
 		}
 	}
-
-	[super showWindows];
 }
+
 
 // for the scripting bridge
 - (void)findInModeScriptCommand:(NSScriptCommand *)command

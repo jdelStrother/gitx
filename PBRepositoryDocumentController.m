@@ -34,6 +34,16 @@
 	[super noteNewRecentDocumentURL:[PBGitRepository baseDirForURL:url]];
 }
 
+-(void)openDocumentWithContentsOfURL:(NSURL *)url display:(BOOL)displayDocument completionHandler:(void (^)(NSDocument *, BOOL, NSError *))completionHandler {
+	NSAppleEventDescriptor *openingAppleEvent = [[NSAppleEventManager sharedAppleEventManager] currentAppleEvent];
+	[super openDocumentWithContentsOfURL:url display:displayDocument completionHandler:^(NSDocument *document, BOOL documentWasAlreadyOpen, NSError *error) {
+		if (!error && openingAppleEvent && [document isKindOfClass:[PBGitRepository class]]) {
+			[(PBGitRepository*)document handleEvent:openingAppleEvent];
+		}
+		completionHandler(document, documentWasAlreadyOpen, error);
+	}];
+}
+
 - (id) documentForLocation:(NSURL*) url
 {
 	id document = [self documentForURL:url];

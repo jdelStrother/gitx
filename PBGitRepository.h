@@ -163,6 +163,7 @@ dispatch_queue_t PBGetWorkQueue();
 - (NSString*) remoteUrl:(NSString*)remoteName;
 - (void) changeRemote:(PBGitRef *)ref toURL:(NSURL*)newUrl;
 
+-(void)handleEvent:(NSAppleEventDescriptor*)currentAppleEvent;
 
 @property (assign) BOOL hasChanged;
 @property (readonly) PBGitWindowController *windowController;
